@@ -51,7 +51,7 @@ app.post<any, any, LoginArgs>('/login', async (req, res) => {
       res.status(400).json({ message: 'Invalid username or password' })
       return
     }
-    const token = jwt.sign({ username: user.username, password: user.password }, SECRET) as string// token declaration
+    const token = jwt.sign({ username: user.username, password: user.password }, SECRET) // token declaration
     console.log(token)
     return res.status(200).json({
       message: 'Login succesfully',
@@ -79,18 +79,17 @@ app.post<any, any, RegisterArgs>('/register', (req, res) => {
     res.status(200).json({ message: 'Register complete' })
   })
 
-app.get('/balance',
-  (req, res) => {
-    const token = req.query.token as string || req.body.token as string
-    console.log(token)
-    try {
-      const { username } = jwt.verify(token, SECRET) as JWTPayload
-      res.status(200).json({ data: username })
-    }
-    catch (e) {
-      //response in case of invalid token
-      res.status(401).json({ message: 'Invalid token' , emess: e.message})
-    }
+app.get('/balance', (req, res) => {
+  const token = req.query.token as string || req.body.token as string
+  console.log(token)
+  try {
+    const { username } = jwt.verify(token, SECRET) as JWTPayload
+    res.status(200).json({ data: username })
+  }
+  catch (e) {
+    //response in case of invalid token
+    res.status(401).json({ message: 'Invalid token' , emess: e.message})
+  }
   })
 
 app.post('/deposit',
@@ -127,7 +126,5 @@ app.get('/demo', (req, res) => {
     message: 'This message is returned from demo route.'
   })
 })
-
-
 
 app.listen(PORT, () => console.log(`Server is running at ${PORT}`))
