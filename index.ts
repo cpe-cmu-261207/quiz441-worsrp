@@ -80,11 +80,14 @@ app.post<any, any, RegisterArgs>('/register', (req, res) => {
   })
 
 app.get('/balance', (req, res) => {
-  const token = req.query.token as string || req.body.token as string
+  const token = req.query.token as string || req.headers.authorization?.split(' ')[1] as string
+  const raw = fs.readFileSync('db.json', 'utf8')
+  const db: DbSchema = JSON.parse(raw)
   console.log(token)
   try {
     const { username } = jwt.verify(token, SECRET) as JWTPayload
-    res.status(200).json({ data: username })
+    const data = db.users.find(user => user.username === { username }.username) 
+    res.status(200).json({ data: data })
   }
   catch (e) {
     //response in case of invalid token
